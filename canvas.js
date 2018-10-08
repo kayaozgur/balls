@@ -33,7 +33,21 @@ function Daire(x, y, dx, dy, radius) {
         c.stroke();
     }
 
-    this.update = function () {
+    this.update = function (daireListe) {
+
+        for (let i = 0; i < daireListe.length; i++) {
+            if (this === daireListe[i]) { continue; }
+            if (Math.sqrt(Math.pow(this.x - daireListe[i].x,2) + Math.pow(this.y - daireListe[i].y,2)) - (this.radius + daireListe[i].radius) < 0) {
+                console.log('carpti');
+                this.dx = -this.dx;
+                this.dy = -this.dy;
+
+                daireListe[i].dx = -daireListe[i].dx;
+                daireListe[i].dy = -daireListe[i].dy; 
+            }
+            
+        
+        }
 
         if (this.x + this.radius > innerWidth || this.x - this.radius < 0) {
             this.dx = -this.dx;
@@ -51,16 +65,21 @@ function Daire(x, y, dx, dy, radius) {
 
 }
 
-var daireListe = [];
+var daireListe;
 
-for (var i = 0; i < 200; i++) {
+function init() {
+    daireListe = [];
 
-    var radius = Math.random() * 30;
-    var x = Math.random() * (innerWidth - radius * 2) + radius;
-    var y = Math.random() * (innerHeight - radius * 2) + radius;
-    var hiz = Math.random() * 4;
-    daireListe.push(new Daire(x, y, hiz, hiz, radius));
+    for (var i = 0; i < 20; i++) {
+    
+        var radius = Math.random() * 30;
+        var x = Math.random() * (innerWidth - radius * 2) + radius;
+        var y = Math.random() * (innerHeight - radius * 2) + radius;
+        var hiz = Math.random() * 4;
+        daireListe.push(new Daire(x, y, hiz, hiz, radius));
+    }
 }
+
 
 
 
@@ -70,10 +89,12 @@ function animate() {
     c.clearRect(0, 0, innerWidth, innerHeight);
 
     for (var i = 0; i < daireListe.length; i++) {
-        daireListe[i].update();
+        daireListe[i].update(daireListe);
     }
+
+   
 
 }
 
-
+init();
 animate();
